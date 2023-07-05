@@ -11,7 +11,7 @@ The extended Dynabot description, simulation, and control software is available 
 
 ## Usage
 
-Load the ANYmal description to the ROS parameter server:
+Load the Dynabot description to the ROS parameter server:
 
     roslaunch dynabot_description load.launch
 
