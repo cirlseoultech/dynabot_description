@@ -1,0 +1,685 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="dynabot"> 
+    
+    <link name="base_footprint" />
+    
+    <joint name="base_link_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="base_footprint" />
+        <child link="base" />
+    </joint>
+
+    <!-- Base link -->
+    <link name="base">
+        <visual>
+            <origin rpy="1.57 0 1.57" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="package://dynabot_description/meshes/main_body_v4.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <box size="0.35 0.22 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="base_to_base_inertia" type="fixed">
+        <parent link="base"/>
+        <child link="base_inertia"/>
+        <origin rpy="0 0 0" xyz="0 0 -0.02"/>
+    </joint>
+    <link name="base_inertia">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="2.082"/>
+            <inertia ixx="0.02" ixy="0.0000002" ixz="0.00000006" iyy="0.021" iyz="0.001" izz="0.004"/>
+        </inertial>
+    </link>
+    
+    <joint name="base_to_lidar" type="fixed">
+        <parent link="base"/>
+        <child link="lidar_link"/>
+        <origin rpy="0 0 0" xyz="0.085 0 0.0275"/>
+    </joint>
+    <link name="lidar_link">
+        <visual>
+            <origin rpy="0 3.14 0" xyz="0 0 -0.025"/>
+            <geometry>
+                <mesh filename="package://dynabot_description/meshes/rplidar-s1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+    </link>
+    
+    <joint name="base_to_camera" type="fixed">
+        <parent link="base"/>
+        <child link="camera_link"/>
+        <origin rpy="0 0.3 0" xyz="0.16 0 0.015"/>
+    </joint>
+    <link name="camera_link">
+        <visual>
+            <origin rpy="1.57 0 1.57" xyz="0.01 0 0"/>
+            <geometry>
+                <mesh filename="package://dynabot_description/meshes/realsense.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+    </link>
+    <joint name="camera_to_image" type="fixed">
+        <parent link="camera_link"/>
+        <child link="camera_image"/>
+        <origin rpy="1.57 3.14 1.57" xyz="0 0 0"/>
+    </joint>
+    <link name="camera_image" />
+
+    <joint name="LF_HAA" type="revolute">
+        <parent link="base"/>
+        <child link="LF_HIP"/>
+        <origin rpy="0 0 0" xyz="0.1375 0.0975 -0.038"/>
+        <axis xyz="-1 0 0"/>
+        <limit effort="1.4" lower="-1.57" upper="1" velocity="6.96"/>
+        <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+    <link name="LF_HIP">
+        <visual>
+            <origin rpy="-1.57 0 0" xyz="0 0 -0.012"/>
+            <geometry>
+                <mesh filename="package://dynabot_description/meshes/2XL-430.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0.098"/>
+            <inertia ixx="0.005" ixy="0" ixz="0" iyy="0.004" iyz="-0.002" izz="0.002"/>
+        </inertial>
+        <collision>
+            <origin rpy="-1.57 0 0" xyz="0 0 -0.012"/>
+            <geometry>
+                <box size="0.04 0.046 0.04"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="LF_HFE" type="revolute">
+        <parent link="LF_HIP"/>
+        <child link="LF_THIGH"/>
+        <origin rpy="0 0 0" xyz="0 0 -0.024"/>
+        <axis xyz="0 1 0"/>
+        <limit effort="1.4" lower="-2.4" upper="2.4" velocity="6.96"/>
+        <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+    <link name="LF_THIGH">
+        <visual>
+            <origin rpy="-1.57 0 1.57" xyz="0 -0.0165 -0.047"/>
+            <geometry>
+                <mesh filename="package://dynabot_description/meshes/thigh.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0.068"/>
+            <inertia ixx="0.005" ixy="0" ixz="0" iyy="0.004" iyz="-0.002" izz="0.002"/>
+        </inertial>
+        <collision>
+            <origin rpy="-1.57 0 1.57" xyz="0 0 -0.05"/>
+            <geometry>
+                <box size="0.042 0.104 0.03"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="LF_KFE" type="revolute">
+        <parent link="LF_THIGH"/>
+        <child link="LF_SHANK"/>
+        <origin rpy="0 0 0" xyz="0 0 -0.09"/>
+        <axis xyz="0 1 0"/>
+        <limit effort="1.4" lower="-2.4" upper="2.4" velocity="6.96"/>
+        <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+    <link name="LF_SHANK">
+        <visual>
+            <origin rpy="-1.57 0 1.57" xyz="0 -0.0115 -0.0385"/>
+            <geometry>
+                <mesh filename="package://dynabot_description/meshes/shank.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0.066"/>
+            <inertia ixx="0.005" ixy="0" ixz="0" iyy="0.004" iyz="-0.002" izz="0.002"/>
+        </inertial>
+        <collision>
+            <origin rpy="-1.57 0 1.57" xyz="0 0 -0.062"/>
+            <geometry>
+                <box size="0.032 0.1 0.028"/>
+            </geometry>
+        </collision>
+        <collision>
+            <origin rpy="1.57 0 0" xyz="-0.003 0 -0.107"/>
+            <geometry>
+                <cylinder length="0.03" radius="0.02"/>
+            </geometry>
+        </collision>
+    </link>
+    
+    <joint name="RF_HAA" type="revolute">
+        <parent link="base"/>
+        <child link="RF_HIP"/>
+        <origin rpy="0 0 0" xyz="0.1375 -0.0975 -0.038"/>
+        <axis xyz="1 0 0"/>
+        <limit effort="1.4" lower="-1.57" upper="1" velocity="6.96"/>
+        <dynamics damping="0.0" friction="0.0"/>
+    </joint>    
+    <link name="RF_HIP">
+        <visual>
+            <origin rpy="-1.57 0 3.14" xyz="0 0 -0.012"/>
+            <geometry>
+                <mesh filename="package://dynabot_description/meshes/2XL-430.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0.098"/>
+            <inertia ixx="0.005" ixy="0" ixz="0" iyy="0.004" iyz="-0.002" izz="0.002"/>
+        </inertial>
+        <collision>
+            <origin rpy="-1.57 0 0" xyz="0 0 -0.012"/>
+            <geometry>
+                <box size="0.04 0.046 0.04"/>
+            </geometry>
+        </collision>
+    </link> 
+    <joint name="RF_HFE" type="revolute">
+        <parent link="RF_HIP"/>
+        <child link="RF_THIGH"/>
+        <origin rpy="0 0 0" xyz="0 0 -0.024"/>
+        <axis xyz="0 -1 0"/>
+        <limit effort="1.4" lower="-2.4" upper="2.4" velocity="6.96"/>
+        <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+    <link name="RF_THIGH">
+        <visual>
+            <origin rpy="-1.57 0 -1.57" xyz="0 0.0165 -0.047"/>
+            <geometry>
+                <mesh filename="package://dynabot_description/meshes/thigh.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0.068"/>
+            <inertia ixx="0.005" ixy="0" ixz="0" iyy="0.004" iyz="-0.002" izz="0.002"/>
+        </inertial>
+        <collision>
+            <origin rpy="-1.57 0 1.57" xyz="0 0 -0.05"/>
+            <geometry>
+                <box size="0.042 0.104 0.03"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="RF_KFE" type="revolute">
+        <parent link="RF_THIGH"/>
+        <child link="RF_SHANK"/>
+        <origin rpy="0 0 0" xyz="0 0 -0.09"/>
+        <axis xyz="0 -1 0"/>
+        <limit effort="1.4" lower="-2.4" upper="2.4" velocity="6.96"/>
+        <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+    <link name="RF_SHANK">
+        <visual>
+            <origin rpy="-1.57 0 1.57" xyz="0 -0.0115 -0.0385"/>
+            <geometry>
+                <mesh filename="package://dynabot_description/meshes/shank.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0.066"/>
+            <inertia ixx="0.005" ixy="0" ixz="0" iyy="0.004" iyz="-0.002" izz="0.002"/>
+        </inertial>
+        <collision>
+            <origin rpy="-1.57 0 1.57" xyz="0 0 -0.062"/>
+            <geometry>
+                <box size="0.032 0.1 0.028"/>
+            </geometry>
+        </collision>
+        <collision>
+            <origin rpy="1.57 0 0" xyz="-0.003 0 -0.107"/>
+            <geometry>
+                <cylinder length="0.03" radius="0.02"/>
+            </geometry>
+        </collision>
+    </link>
+    
+    <joint name="LH_HAA" type="revolute">
+        <parent link="base"/>
+        <child link="LH_HIP"/>
+        <origin rpy="0 0 0" xyz="-0.1375 0.0975 -0.038"/>
+        <axis xyz="-1 0 0"/>
+        <limit effort="1.4" lower="-1.57" upper="1" velocity="6.96"/>
+        <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+    <link name="LH_HIP">
+        <visual>
+            <origin rpy="-1.57 0 0" xyz="0 0 -0.012"/>
+            <geometry>
+                <mesh filename="package://dynabot_description/meshes/2XL-430.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0.098"/>
+            <inertia ixx="0.005" ixy="0" ixz="0" iyy="0.004" iyz="-0.002" izz="0.002"/>
+        </inertial>
+        <collision>
+            <origin rpy="-1.57 0 0" xyz="0 0 -0.012"/>
+            <geometry>
+                <box size="0.04 0.046 0.04"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="LH_HFE" type="revolute">
+        <parent link="LH_HIP"/>
+        <child link="LH_THIGH"/>
+        <origin rpy="0 0 0" xyz="0 0 -0.024"/>
+        <axis xyz="0 1 0"/>
+        <limit effort="1.4" lower="-2.4" upper="2.4" velocity="6.96"/>
+        <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+    <link name="LH_THIGH">
+        <visual>
+            <origin rpy="-1.57 0 1.57" xyz="0 -0.0165 -0.047"/>
+            <geometry>
+                <mesh filename="package://dynabot_description/meshes/thigh.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0.068"/>
+            <inertia ixx="0.005" ixy="0" ixz="0" iyy="0.004" iyz="-0.002" izz="0.002"/>
+        </inertial>
+        <collision>
+            <origin rpy="-1.57 0 1.57" xyz="0 0 -0.05"/>
+            <geometry>
+                <box size="0.042 0.104 0.03"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="LH_KFE" type="revolute">
+        <parent link="LH_THIGH"/>
+        <child link="LH_SHANK"/>
+        <origin rpy="0 0 0" xyz="0 0 -0.09"/>
+        <axis xyz="0 1 0"/>
+        <limit effort="1.4" lower="-2.4" upper="2.4" velocity="6.96"/>
+        <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+    <link name="LH_SHANK">
+        <visual>
+            <origin rpy="-1.57 0 1.57" xyz="0 -0.0115 -0.0385"/>
+            <geometry>
+                <mesh filename="package://dynabot_description/meshes/shank.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0.066"/>
+            <inertia ixx="0.005" ixy="0" ixz="0" iyy="0.004" iyz="-0.002" izz="0.002"/>
+        </inertial>
+        <collision>
+            <origin rpy="-1.57 0 1.57" xyz="0 0 -0.062"/>
+            <geometry>
+                <box size="0.032 0.1 0.028"/>
+            </geometry>
+        </collision>
+        <collision>
+            <origin rpy="1.57 0 0" xyz="-0.003 0 -0.107"/>
+            <geometry>
+                <cylinder length="0.03" radius="0.02"/>
+            </geometry>
+        </collision>
+    </link>
+    
+    <joint name="RH_HAA" type="revolute">
+        <parent link="base"/>
+        <child link="RH_HIP"/>
+        <origin rpy="0 0 0" xyz="-0.1375 -0.0975 -0.038"/>
+        <axis xyz="1 0 0"/>
+        <limit effort="1.4" lower="-1.57" upper="1" velocity="6.96"/>
+        <dynamics damping="0.0" friction="0.0"/>
+    </joint>    
+    <link name="RH_HIP">
+        <visual>
+            <origin rpy="-1.57 0 3.14" xyz="0 0 -0.012"/>
+            <geometry>
+                <mesh filename="package://dynabot_description/meshes/2XL-430.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0.098"/>
+            <inertia ixx="0.005" ixy="0" ixz="0" iyy="0.004" iyz="-0.002" izz="0.002"/>
+        </inertial>
+        <collision>
+            <origin rpy="-1.57 0 0" xyz="0 0 -0.012"/>
+            <geometry>
+                <box size="0.04 0.046 0.04"/>
+            </geometry>
+        </collision>
+    </link> 
+    <joint name="RH_HFE" type="revolute">
+        <parent link="RH_HIP"/>
+        <child link="RH_THIGH"/>
+        <origin rpy="0 0 0" xyz="0 0 -0.024"/>
+        <axis xyz="0 -1 0"/>
+        <limit effort="1.4" lower="-2.4" upper="2.4" velocity="6.96"/>
+        <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+    <link name="RH_THIGH">
+        <visual>
+            <origin rpy="-1.57 0 -1.57" xyz="0 0.0165 -0.047"/>
+            <geometry>
+                <mesh filename="package://dynabot_description/meshes/thigh.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0.068"/>
+            <inertia ixx="0.005" ixy="0" ixz="0" iyy="0.004" iyz="-0.002" izz="0.002"/>
+        </inertial>
+        <collision>
+            <origin rpy="-1.57 0 1.57" xyz="0 0 -0.05"/>
+            <geometry>
+                <box size="0.042 0.104 0.03"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="RH_KFE" type="revolute">
+        <parent link="RH_THIGH"/>
+        <child link="RH_SHANK"/>
+        <origin rpy="0 0 0" xyz="0 0 -0.09"/>
+        <axis xyz="0 -1 0"/>
+        <limit effort="1.4" lower="-2.57" upper="2.57" velocity="6.96"/>
+        <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+    <link name="RH_SHANK">
+        <visual>
+            <origin rpy="-1.57 0 1.57" xyz="0 -0.0115 -0.0385"/>
+            <geometry>
+                <mesh filename="package://dynabot_description/meshes/shank.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0.066"/>
+            <inertia ixx="0.005" ixy="0" ixz="0" iyy="0.004" iyz="-0.002" izz="0.002"/>
+        </inertial>
+        <collision>
+            <origin rpy="-1.57 0 1.57" xyz="0 0 -0.062"/>
+            <geometry>
+                <box size="0.032 0.1 0.028"/>
+            </geometry>
+        </collision>
+        <collision>
+            <origin rpy="1.57 0 0" xyz="-0.003 0 -0.107"/>
+            <geometry>
+                <cylinder length="0.03" radius="0.02"/>
+            </geometry>
+        </collision>
+    </link>
+    
+    <gazebo reference="LF_SHANK">
+		<mu1>1.0</mu1>
+		<mu2>1.0</mu2>
+		<minDepth>0.0002</minDepth>
+		<kp  value="1000000.0"/>
+		<kd  value="100.0"/>
+	</gazebo>
+
+	<gazebo reference="RF_SHANK">
+		<mu1>1.0</mu1>
+		<mu2>1.0</mu2>
+		<minDepth>0.0002</minDepth>
+		<kp  value="1000000.0"/>
+		<kd  value="100.0"/>
+	</gazebo>
+
+	<gazebo reference="LH_SHANK">
+		<mu1>1.0</mu1>
+		<mu2>1.0</mu2>
+		<minDepth>0.0002</minDepth>
+		<kp  value="1000000.0"/>
+		<kd  value="100.0"/>
+	</gazebo>
+
+	<gazebo reference="RH_SHANK">
+		<mu1>1.0</mu1>
+		<mu2>1.0</mu2>
+		<minDepth>0.0002</minDepth>
+		<kp  value="1000000.0"/>
+		<kd  value="100.0"/>
+	</gazebo>
+	
+  <gazebo reference="camera_link">
+  <sensor name="camera_link_camera" type="depth">
+    <update_rate>20</update_rate>
+    <camera>
+      <horizontal_fov>1.047198</horizontal_fov>
+      <image>
+        <width>640</width>
+        <height>480</height>
+        <format>R8G8B8</format>
+      </image>
+      <clip>
+        <near>0.05</near>
+        <far>3</far>
+      </clip>
+    </camera>
+    <plugin name="camera_link_controller" filename="libgazebo_ros_openni_kinect.so">
+      <baseline>0.2</baseline>
+      <alwaysOn>true</alwaysOn>
+      <updateRate>1.0</updateRate>
+      <cameraName>camera_ir</cameraName>
+      <imageTopicName>/camera/color/image_raw</imageTopicName>
+      <cameraInfoTopicName>/camera/color/camera_info</cameraInfoTopicName>
+      <depthImageTopicName>/camera/depth/image_raw</depthImageTopicName>
+      <depthImageInfoTopicName>/camera/depth/camera_info</depthImageInfoTopicName>
+      <pointCloudTopicName>/camera/depth/points</pointCloudTopicName>
+      <frameName>camera_image</frameName>
+      <pointCloudCutoff>0.5</pointCloudCutoff>
+      <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
+      <distortionK1>0.00000001</distortionK1>
+      <distortionK2>0.00000001</distortionK2>
+      <distortionK3>0.00000001</distortionK3>
+      <distortionT1>0.00000001</distortionT1>
+      <distortionT2>0.00000001</distortionT2>
+      <CxPrime>0</CxPrime>
+      <Cx>0</Cx>
+      <Cy>0</Cy>
+      <focalLength>0</focalLength>
+      <hackBaseline>0</hackBaseline>
+    </plugin>
+  </sensor>
+</gazebo>
+  
+  <!-- hokuyo -->
+  <gazebo reference="lidar_link">
+    <sensor type="gpu_ray" name="head_hokuyo_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>40</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>-3.14</min_angle>
+            <max_angle>3.14</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.10</min>
+          <max>30.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <!-- Noise parameters based on published spec for Hokuyo laser
+               achieving "+-30mm" accuracy at range < 10m.  A mean of 0.0m and
+               stddev of 0.01m will put 99.7% of samples within 0.03m of the true
+               reading. -->
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_gpu_laser.so">
+        <topicName>/scan</topicName>
+        <frameName>lidar_link</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+    
+    <!-- IMU sensor -->
+	<gazebo reference="base_inertia">
+		<gravity>true</gravity>
+		<sensor name="imu_sensor" type="imu">
+			<always_on>true</always_on>
+			<update_rate>100</update_rate>
+			<visualize>true</visualize>
+			<topic>__default_topic__</topic>
+			<plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+				<topicName>dynabot/imu</topicName>
+				<bodyName>base_inertia</bodyName>
+				<updateRateHZ>15.0</updateRateHZ>
+				<gaussianNoise>0.0</gaussianNoise>
+				<xyzOffset>0 0 0</xyzOffset>
+				<rpyOffset>0 0 0</rpyOffset>
+				<frameName>base_inertia</frameName>
+				<initialOrientationAsReference>false</initialOrientationAsReference>
+			</plugin>
+			<pose>0 0 0 0 0 0</pose>
+		</sensor>
+	</gazebo>
+    
+    <transmission name="LF_HAA_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="LF_HAA">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="LF_HAA_actuator">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+         <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+   </transmission>
+   <transmission name="LF_HFE_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="LF_HFE">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="LF_HFE_actuator">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+         <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+   </transmission>
+   <transmission name="LF_KFE_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="LF_KFE">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="LF_KFE_actuator">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+         <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+   </transmission>
+   <transmission name="RF_HAA_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="RF_HAA">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="RF_HAA_actuator">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+         <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+   </transmission>
+   <transmission name="RF_HFE_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="RF_HFE">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="RF_HFE_actuator">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+         <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+   </transmission>
+   <transmission name="RF_KFE_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="RF_KFE">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="RF_KFE_actuator">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+         <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+   </transmission>
+   <transmission name="LH_HAA_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="LH_HAA">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="LH_HAA_actuator">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+         <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+   </transmission>
+   <transmission name="LH_HFE_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="LH_HFE">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="LH_HFE_actuator">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+         <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+   </transmission>
+   <transmission name="LH_KFE_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="LH_KFE">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="LH_KFE_actuator">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+         <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+   </transmission>
+   <transmission name="RH_HAA_trans">
+      <type>transmission_inteRHace/SimpleTransmission</type>
+      <joint name="RH_HAA">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="RH_HAA_actuator">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+         <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+   </transmission>
+   <transmission name="RH_HFE_trans">
+      <type>transmission_inteRHace/SimpleTransmission</type>
+      <joint name="RH_HFE">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="RH_HFE_actuator">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+         <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+   </transmission>
+   <transmission name="RH_KFE_trans">
+      <type>transmission_inteRHace/SimpleTransmission</type>
+      <joint name="RH_KFE">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="RH_KFE_actuator">
+         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+         <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+   </transmission>
+   <gazebo>
+      <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
+         <legacyModeNS>true</legacyModeNS>
+      </plugin>
+   </gazebo>
+</robot>
+
