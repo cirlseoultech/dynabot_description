@@ -1,11 +1,13 @@
-# Dynabot Robot Description (URDF)
+# Dynabot - Quadruped Robot Platform Description (URDF)
 ## Overview
 
-This package contains a simplified robot description (URDF) of the [Dynabot](https://www.youtube.com/channel/UCvLNY4Xos34DEHYCKBYXAZA) developed by [Control and Intelligent Robotic Lab](https://sites.google.com/site/cdslweb), Seoultech.
+This package contains a simplified robot description (URDF) of the [Dynabot](https://sites.google.com/site/cdslweb/publication/dynabot-robot) developed by [Control and Intelligent Robotic Lab](https://sites.google.com/site/cdslweb), Seoultech.
 
 The extended Dynabot description, simulation, and control software is available exclusively to members of the [Control and Intelligent Robotic Lab](https://sites.google.com/site/cdslweb). For more information and membership applications, contact jungsu@seoultech.ac.kr.
 
-**Author & Maintainer: Jung-Su Kim, [Control and Intelligent Robotic Lab]**
+Video can be seeing in [Youtube video](https://www.youtube.com/watch?v=JLG3Ncqs7L0&list=PLnuzMlHfcWBUMg_yvTnj3FniXVF3qvJvJ)
+
+**Author & Maintainer: Fikih Muhamad and Jung-Su Kim, [Control and Intelligent Robotic Lab](https://sites.google.com/site/cdslweb)**
 
 ![alt text](https://github.com/cirlseoultech/dynabot_description/blob/main/picture/robot.jpg?raw=true)
 
